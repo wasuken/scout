@@ -1,4 +1,4 @@
-module github.com/wasuken/package_list_watcher_client
+module github.com/wasuken/scout
 
 go 1.15
 

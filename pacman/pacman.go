@@ -9,12 +9,12 @@ import (
 	"github.com/wasuken/scout/send"
 )
 
-func GetInfo() (error, send.SendInfo) {
+func GetInfo() (error, send.SendPackageInfo) {
 	localPkgs, err := pacman.ReadLocalDatabase(func(er error) error {
 		panic(er)
 	})
 	if err != nil {
-		return err, send.SendInfo{}
+		return err, send.SendPackageInfo{}
 	}
 	localPkgMap := pkgutil.MapPkg(localPkgs, func(pkg pacman.AnyPackage) string {
 		return pkg.Pkg().PkgName()
@@ -22,7 +22,7 @@ func GetInfo() (error, send.SendInfo) {
 
 	name, err := os.Hostname()
 	if err != nil {
-		return err, send.SendInfo{}
+		return err, send.SendPackageInfo{}
 	}
 
 	pkgInfos := []send.PackageInfo{}
@@ -33,7 +33,7 @@ func GetInfo() (error, send.SendInfo) {
 			Description: pkg.Description}
 		pkgInfos = append(pkgInfos, pkgInfo)
 	}
-	return nil, send.SendInfo{
+	return nil, send.SendPackageInfo{
 		Name:        name,
 		Arch:        runtime.GOARCH,
 		PackManType: "pacman",

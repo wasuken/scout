@@ -13,23 +13,42 @@ type PackageInfo struct {
 	Description string
 }
 
-type SendInfo struct {
+type SendPackageInfo struct {
 	Packs       []PackageInfo
 	Name        string // サーバ名
 	PackManType string // パッケージマネージャの種類(apt|pacman)
 	Arch        string // サーバのOSのArch
 }
 
-func SendSrv(info SendInfo, url string) {
+type SendCPUInfo struct {
+	CPUTime     float64
+	Name        string // サーバ名
+	PackManType string // パッケージマネージャの種類(apt|pacman)
+	Arch        string // サーバのOSのArch
+}
+
+func (cpuinfo SendCPUInfo) SendSrv(info SendCPUInfo, url string) {
 	json, err := json.Marshal(info)
 	if err != nil {
 		panic(err)
 	}
+	b := bytes.NewBuffer(json)
+	coreSendSrv(b, url)
+}
 
+func (packinfo SendPackageInfo) SendSrv(info SendPackageInfo, url string) {
+	json, err := json.Marshal(info)
+	if err != nil {
+		panic(err)
+	}
+	b := bytes.NewBuffer(json)
+	coreSendSrv(b, url)
+}
+func coreSendSrv(jsonb *bytes.Buffer, url string) {
 	req, err := http.NewRequest(
 		"POST",
 		url,
-		bytes.NewBuffer(json),
+		jsonb,
 	)
 	if err != nil {
 		panic(err)

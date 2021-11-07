@@ -1,9 +1,10 @@
 package config
 
 import (
-	"github.com/pelletier/go-toml"
 	"os/user"
 	"strings"
+
+	"github.com/pelletier/go-toml"
 )
 
 const CONFIG_PATH = "~/.config/plwc/config.tml"

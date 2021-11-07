@@ -9,7 +9,7 @@ import (
 	"github.com/wasuken/scout/send"
 )
 
-func GetInfo() (error, send.SendInfo) {
+func GetInfo() (error, send.SendPackageInfo) {
 	apt.CheckForUpdates()
 	allPkgs, err := apt.List()
 	if err != nil {
@@ -22,9 +22,9 @@ func GetInfo() (error, send.SendInfo) {
 	}
 	name, err := os.Hostname()
 	if err != nil {
-		return err, send.SendInfo{}
+		return err, send.SendPackageInfo{}
 	}
-	return nil, send.SendInfo{
+	return nil, send.SendPackageInfo{
 		Name:        name,
 		PackManType: "apt",
 		Arch:        runtime.GOARCH,

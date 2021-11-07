@@ -1,35 +1,40 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/wasuken/scout/apt"
 	"github.com/wasuken/scout/config"
+	"github.com/wasuken/scout/cpu"
 	"github.com/wasuken/scout/pacman"
-	"github.com/wasuken/scout/send"
 )
 
 func main() {
-	pacMan := os.Args[1]
+	main_cmd := os.Args[1]
 	err, config := config.ReadConfig()
 	if err != nil {
 		panic(err)
 	}
-	if pacMan == "pacman" {
+	switch main_cmd {
+	case "pacman":
 		err, info := pacman.GetInfo()
 		if err != nil {
 			panic(err)
 		}
-		send.SendSrv(info, config.URL)
-	} else if pacMan == "apt" {
-		apt.GetInfo()
+		info.SendSrv(info, config.URL)
+	case "apt":
 		err, info := apt.GetInfo()
 		if err != nil {
 			panic(err)
 		}
-		send.SendSrv(info, config.URL)
-	} else {
-		fmt.Println("Ha?")
+		info.SendSrv(info, config.URL)
+	case "cpu":
+		err, info := cpu.GetInfo()
+		if err != nil {
+			panic(err)
+		}
+		info.SendSrv(info, config.URL)
+	default:
+		println("ha?")
 	}
 }
